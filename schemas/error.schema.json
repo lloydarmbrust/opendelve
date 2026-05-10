@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://opendelve.github.io/schemas/v1/error.schema.json",
+  "$id": "https://lloydarmbrust.github.io/opendelve/schemas/v1/error.schema.json",
   "title": "OpenDelve Error Envelope",
   "description": "Error-shape JSON envelope emitted when a command fails. Distinct from the success envelope (decision.schema.json) per eng review A4. Agents distinguish success vs error by the top-level 'kind' field: 'decision' | 'error'.",
   "type": "object",

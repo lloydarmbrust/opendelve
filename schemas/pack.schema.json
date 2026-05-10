@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://opendelve.github.io/schemas/v1/pack.schema.json",
+  "$id": "https://lloydarmbrust.github.io/opendelve/schemas/v1/pack.schema.json",
   "title": "OpenDelve Pack Manifest",
   "description": "Manifest for an OpenDelve compliance pack. Lives at <pack>/pack.yaml. Defines the pack's identity, framework mappings, controls, dependencies, and capabilities.",
   "type": "object",

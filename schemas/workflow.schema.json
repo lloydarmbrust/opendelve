@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://opendelve.github.io/schemas/v1/workflow.schema.json",
+  "$id": "https://lloydarmbrust.github.io/opendelve/schemas/v1/workflow.schema.json",
   "title": "OpenDelve Workflow Definition",
   "description": "Sequence of compliance steps for a subject type. Lives at workflows/WF-<id>-<slug>.yml. v1 supports linear workflows; branching is v0.2.",
   "type": "object",

@@ -2,7 +2,7 @@
 package main
 
 import (
-	"github.com/opendelve/opendelve/internal/cli"
+	"github.com/lloydarmbrust/opendelve/internal/cli"
 )
 
 // Set by GoReleaser at build time.

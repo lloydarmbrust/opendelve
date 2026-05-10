@@ -81,7 +81,7 @@ changelog:
 
 release:
   github:
-    owner: opendelve
+    owner: lloydarmbrust
     name: opendelve
   draft: false
   prerelease: auto
@@ -96,7 +96,7 @@ release:
 
     ```bash
     cosign verify-blob \
-      --certificate-identity-regexp "https://github.com/opendelve/opendelve" \
+      --certificate-identity-regexp "https://github.com/lloydarmbrust/opendelve" \
       --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
       --signature opendelve_{{.Version}}_*.tar.gz.sig \
       --certificate opendelve_{{.Version}}_*.tar.gz.cert \
@@ -106,10 +106,10 @@ release:
 # brews:
 #   - name: opendelve
 #     repository:
-#       owner: opendelve
+#       owner: lloydarmbrust
 #       name: homebrew-tap
 #     directory: Formula
-#     homepage: 'https://github.com/opendelve/opendelve'
+#     homepage: 'https://github.com/lloydarmbrust/opendelve'
 #     description: 'Compliance as code for AI agents'
 #     license: 'MIT'
 #     test: |

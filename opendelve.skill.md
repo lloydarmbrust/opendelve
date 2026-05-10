@@ -147,4 +147,4 @@ You report to the user:
 
 - Full agent contract: `AGENTS.md`
 - Schemas: `schemas/*.schema.json`
-- Repository: https://github.com/opendelve/opendelve
+- Repository: https://github.com/lloydarmbrust/opendelve

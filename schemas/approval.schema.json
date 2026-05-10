@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://opendelve.github.io/schemas/v1/approval.schema.json",
+  "$id": "https://lloydarmbrust.github.io/opendelve/schemas/v1/approval.schema.json",
   "title": "OpenDelve Approval Receipt",
   "description": "JSON receipt produced by `opendelve approve sign`. Lives at approvals/<year>/APR-<year>-<counter>.json. Per eng review A5: this is an APPROVAL RECEIPT, not a cryptographically signed PDF. Cryptographic anchor is the git commit (sha) plus the Sigstore-signed binary that produced it.",
   "type": "object",

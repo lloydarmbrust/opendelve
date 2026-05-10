@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://opendelve.github.io/schemas/v1/evidence.schema.json",
+  "$id": "https://lloydarmbrust.github.io/opendelve/schemas/v1/evidence.schema.json",
   "title": "OpenDelve Evidence Manifest",
   "description": "Manifest for an attached evidence file. Lives at evidence/manifests/<subject>-<schema>-<id>.json. Raw evidence stays at the user-provided path; only the manifest goes in git by default. PHI policy: raw is NEVER embedded in the manifest unless --include-raw is explicitly passed at audit packet build time.",
   "type": "object",

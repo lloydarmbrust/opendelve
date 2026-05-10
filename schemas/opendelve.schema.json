@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://opendelve.github.io/schemas/v1/opendelve.schema.json",
+  "$id": "https://lloydarmbrust.github.io/opendelve/schemas/v1/opendelve.schema.json",
   "title": "OpenDelve Repo Config",
   "description": "Root configuration for an OpenDelve-managed repo. Lives at <repo>/opendelve.yaml.",
   "type": "object",

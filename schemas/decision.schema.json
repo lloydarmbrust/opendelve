@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://opendelve.github.io/schemas/v1/decision.schema.json",
+  "$id": "https://lloydarmbrust.github.io/opendelve/schemas/v1/decision.schema.json",
   "title": "OpenDelve Agent Decision Envelope (Success)",
   "description": "Success-shape JSON envelope emitted by every read command (verify, explain, trace, schemas list, packs list, schema validate). Agents parse this to determine next safe action. Distinct from the error envelope (see error.schema.json).",
   "type": "object",

@@ -1,4 +1,4 @@
-module github.com/opendelve/opendelve
+module github.com/lloydarmbrust/opendelve
 
 go 1.26.3
 

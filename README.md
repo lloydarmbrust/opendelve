@@ -9,7 +9,7 @@ GitHub-native compliance bootstrap kit for regulated AI workflows. Scaffolds a w
 ## Quick start (target experience)
 
 ```bash
-brew install opendelve/tap/opendelve
+brew install lloydarmbrust/tap/opendelve
 
 opendelve init my-quality --pack iso9001
 cd my-quality

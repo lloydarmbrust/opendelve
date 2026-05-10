@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://opendelve.github.io/schemas/v1/sop.schema.json",
+  "$id": "https://lloydarmbrust.github.io/opendelve/schemas/v1/sop.schema.json",
   "title": "OpenDelve SOP Frontmatter",
   "description": "YAML frontmatter for an SOP markdown file. The body of the markdown file holds Purpose, Scope, Responsibilities, Procedure, References sections.",
   "type": "object",

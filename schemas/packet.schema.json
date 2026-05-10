@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://opendelve.github.io/schemas/v1/packet.schema.json",
+  "$id": "https://lloydarmbrust.github.io/opendelve/schemas/v1/packet.schema.json",
   "title": "OpenDelve Audit Packet Manifest",
   "description": "Manifest for an audit packet bundle. Lives at audit-packets/<year>/<subject>/manifest.json. Lists every artifact in the packet plus their hashes for integrity. Per PHI policy, raw evidence is NEVER embedded in the packet PDF or zip unless --include-raw was explicitly passed at build time.",
   "type": "object",

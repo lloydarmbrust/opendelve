@@ -89,4 +89,4 @@ the presence of a top-level `kind: "error"` field.
 ## Reference
 
 Full schema definitions: `schemas/*.schema.json`
-Documentation: https://github.com/opendelve/opendelve
+Documentation: https://github.com/lloydarmbrust/opendelve
