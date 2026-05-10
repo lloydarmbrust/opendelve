@@ -1,0 +1,138 @@
+# OpenDelve release pipeline.
+# Schema: GoReleaser v2 (https://goreleaser.com/customization/)
+version: 2
+
+project_name: opendelve
+
+before:
+  hooks:
+    - go mod tidy
+    - go mod verify
+
+builds:
+  - id: opendelve
+    main: ./cmd/opendelve
+    binary: opendelve
+    env:
+      - CGO_ENABLED=0
+    flags:
+      - -trimpath
+    ldflags:
+      - -s -w
+      - -X main.version={{.Version}}
+      - -X main.commit={{.Commit}}
+      - -X main.date={{.Date}}
+    goos:
+      - darwin
+      - linux
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    ignore:
+      - goos: windows
+        goarch: arm64
+
+archives:
+  - id: default
+    name_template: >-
+      {{ .ProjectName }}_{{ .Version }}_
+      {{- title .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }}
+    formats: [tar.gz]
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+    files:
+      - LICENSE
+      - README.md
+      - AGENTS.md
+
+checksum:
+  name_template: 'checksums.txt'
+  algorithm: sha256
+
+snapshot:
+  version_template: '{{ incpatch .Version }}-next'
+
+changelog:
+  sort: asc
+  use: github
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+      - '^chore:'
+      - 'merge conflict'
+      - Merge pull request
+      - Merge remote-tracking branch
+      - Merge branch
+  groups:
+    - title: Features
+      regexp: '^.*?feat(\(.+\))??!?:.+$'
+      order: 0
+    - title: 'Bug fixes'
+      regexp: '^.*?fix(\(.+\))??!?:.+$'
+      order: 1
+    - title: Others
+      order: 999
+
+release:
+  github:
+    owner: opendelve
+    name: opendelve
+  draft: false
+  prerelease: auto
+  name_template: 'v{{.Version}}'
+  header: |
+    ## OpenDelve v{{.Version}}
+
+    Compliance as code for AI agents.
+  footer: |
+    ---
+    Verify the binary with cosign:
+
+    ```bash
+    cosign verify-blob \
+      --certificate-identity-regexp "https://github.com/opendelve/opendelve" \
+      --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
+      --signature opendelve_{{.Version}}_*.tar.gz.sig \
+      --certificate opendelve_{{.Version}}_*.tar.gz.cert \
+      opendelve_{{.Version}}_*.tar.gz
+    ```
+
+# brews:
+#   - name: opendelve
+#     repository:
+#       owner: opendelve
+#       name: homebrew-tap
+#     directory: Formula
+#     homepage: 'https://github.com/opendelve/opendelve'
+#     description: 'Compliance as code for AI agents'
+#     license: 'MIT'
+#     test: |
+#       system "#{bin}/opendelve --version"
+#     install: |
+#       bin.install "opendelve"
+# (uncommented once the homebrew-tap repo exists in the org)
+
+# sboms:
+#   - artifacts: archive
+# (uncommented once the syft tool is added to CI)
+
+# signs:
+#   - cmd: cosign
+#     env:
+#       - COSIGN_EXPERIMENTAL=1
+#     certificate: '${artifact}.cert'
+#     args:
+#       - sign-blob
+#       - --output-certificate=${certificate}
+#       - --output-signature=${signature}
+#       - --yes
+#       - ${artifact}
+#     artifacts: checksum
+#     output: true
+# (uncommented once we run from GitHub Actions runner with OIDC)

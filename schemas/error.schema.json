@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://opendelve.github.io/schemas/v1/error.schema.json",
+  "title": "OpenDelve Error Envelope",
+  "description": "Error-shape JSON envelope emitted when a command fails. Distinct from the success envelope (decision.schema.json) per eng review A4. Agents distinguish success vs error by the top-level 'kind' field: 'decision' | 'error'.",
+  "type": "object",
+  "required": ["schemaVersion", "kind", "code", "message"],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "v1"
+    },
+    "kind": {
+      "type": "string",
+      "const": "error",
+      "description": "Discriminator. Always 'error' for this envelope."
+    },
+    "code": {
+      "type": "string",
+      "pattern": "^[a-z][a-z_]*[a-z]$",
+      "description": "Machine-readable error code. Stable across versions. Examples: git_not_initialized, schema_unknown, pack_unknown, evidence_schema_mismatch, approval_already_signed, io_failed.",
+      "examples": [
+        "git_not_initialized",
+        "git_identity_missing",
+        "schema_unknown",
+        "schema_validation_failed",
+        "pack_unknown",
+        "pack_already_present",
+        "evidence_schema_mismatch",
+        "approval_not_found",
+        "approval_already_signed",
+        "subject_not_found",
+        "config_invalid",
+        "config_missing",
+        "io_failed",
+        "permission_denied",
+        "internal_error"
+      ]
+    },
+    "message": {
+      "type": "string",
+      "minLength": 1,
+      "description": "One-line human-readable error description. Lowercase, no trailing period (matches Go convention)."
+    },
+    "hint": {
+      "type": "string",
+      "description": "Optional one-line suggested next action. Example: 'run git init to initialize a repo, then try again'."
+    },
+    "docUrl": {
+      "type": "string",
+      "format": "uri",
+      "description": "Optional link to documentation explaining this error."
+    },
+    "details": {
+      "type": "object",
+      "description": "Command-specific error context. Example: schema_validation_failed includes a 'failures' array with each failed assertion.",
+      "additionalProperties": true
+    },
+    "subject": {
+      "type": "string",
+      "description": "Optional. Subject id when the error relates to a specific subject."
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "UTC ISO 8601 of when the error occurred."
+    }
+  },
+  "additionalProperties": false
+}

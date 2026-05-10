@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://opendelve.github.io/schemas/v1/decision.schema.json",
+  "title": "OpenDelve Agent Decision Envelope (Success)",
+  "description": "Success-shape JSON envelope emitted by every read command (verify, explain, trace, schemas list, packs list, schema validate). Agents parse this to determine next safe action. Distinct from the error envelope (see error.schema.json).",
+  "type": "object",
+  "required": ["schemaVersion", "status", "subject"],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "v1"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["ok", "needs_approval", "needs_evidence", "blocked"],
+      "description": "Agent decision signal. 'ok' = proceed; anything else = escalate to human or take next allowedNext action."
+    },
+    "subject": {
+      "type": "string",
+      "description": "Subject identifier (e.g., 'SOP-0001', 'shipment-042', 'APR-2026-0001')."
+    },
+    "subjectType": {
+      "type": "string",
+      "enum": ["sop", "workflow", "evidence", "approval", "shipment", "release", "subject"],
+      "description": "Optional. The kind of thing being evaluated."
+    },
+    "policyRefs": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Policy / SOP / control ids that govern this subject."
+    },
+    "requiredEvidence": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Evidence schema names required to satisfy this subject. Empty = none required or already satisfied."
+    },
+    "missingEvidence": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Evidence schemas that are required but not yet present."
+    },
+    "requiredApprovals": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Roles / approver ids that must sign. Empty = none required or already satisfied."
+    },
+    "missingApprovals": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Approvals that are required but not yet signed."
+    },
+    "blockedActions": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Actions an agent must NOT take while this subject is in this state."
+    },
+    "allowedNext": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Allow-listed next commands an agent may run to advance the subject. Example: ['evidence add', 'approve request']."
+    },
+    "git": {
+      "type": "object",
+      "description": "Git context at the time of evaluation.",
+      "properties": {
+        "commit": { "type": "string", "description": "sha1 hex" },
+        "branch": { "type": "string" },
+        "dirty": { "type": "boolean", "description": "True if uncommitted changes affect the subject." }
+      }
+    },
+    "data": {
+      "description": "Command-specific payload. Shape varies by command (e.g., schemas list returns array of schema names; trace returns a list of events).",
+      "anyOf": [
+        { "type": "object" },
+        { "type": "array" },
+        { "type": "string" },
+        { "type": "number" },
+        { "type": "boolean" },
+        { "type": "null" }
+      ]
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "UTC ISO 8601 of when the decision was computed."
+    }
+  },
+  "additionalProperties": false
+}

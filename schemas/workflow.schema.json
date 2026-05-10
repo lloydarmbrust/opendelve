@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://opendelve.github.io/schemas/v1/workflow.schema.json",
+  "title": "OpenDelve Workflow Definition",
+  "description": "Sequence of compliance steps for a subject type. Lives at workflows/WF-<id>-<slug>.yml. v1 supports linear workflows; branching is v0.2.",
+  "type": "object",
+  "required": ["schemaVersion", "id", "title", "subjectType", "steps"],
+  "properties": {
+    "schemaVersion": { "type": "string", "const": "v1" },
+    "id": {
+      "type": "string",
+      "pattern": "^WF-\\d{4}$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "subjectType": {
+      "type": "string",
+      "description": "What kind of subject this workflow applies to. Examples: shipment, release, change, deviation."
+    },
+    "policyRefs": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "steps": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "action"],
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "string" },
+          "action": {
+            "type": "string",
+            "enum": ["evidence.add", "policy.check", "approval.request", "state.transition", "notify"]
+          },
+          "schema": {
+            "type": "string",
+            "description": "For evidence.add: the schema name to attach."
+          },
+          "rule": {
+            "type": "string",
+            "description": "For policy.check: presence/schema check identifier (v1)."
+          },
+          "roles": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "For approval.request: roles that must sign."
+          },
+          "to": {
+            "type": "string",
+            "description": "For state.transition: target state."
+          },
+          "blocking": {
+            "type": "boolean",
+            "default": true,
+            "description": "If true, failure of this step blocks subsequent steps."
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "onFailure": {
+      "type": "object",
+      "properties": {
+        "action": { "type": "string", "enum": ["state.transition", "notify"] },
+        "to": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
