@@ -1,0 +1,44 @@
+schemaVersion: v1
+id: iso9001
+version: 0.1.0
+framework:
+  name: ISO 9001
+  version: "2015"
+  url: https://www.iso.org/standard/62085.html
+name: ISO 9001:2015 Quality Management System
+description: |
+  Starter quality management system aligned to ISO 9001:2015 clauses.
+  Includes document control, operations control (release), and a
+  temperature-sensitive shipment release SOP suitable for regulated
+  cold-chain workflows. Pack content is original to OpenDelve and
+  represents one plausible implementation of the standard's clauses;
+  the standard text itself is not redistributed.
+depth: deep
+files:
+  - path: sops/SOP-0001-temperature-sensitive-shipment-release.md
+    role: sop
+    controlIds: ["8.5.1", "8.5.4"]
+  - path: workflows/WF-0001-shipment-release.yml
+    role: workflow
+    controlIds: ["8.5.1"]
+  - path: evidence-schemas/temperature-log.yaml
+    role: evidence-schema
+    controlIds: ["8.5.1"]
+  - path: controls/control-map.yaml
+    role: control-map
+controls:
+  - id: "7.5"
+    title: Documented information
+    scope: partial
+  - id: "8.5.1"
+    title: Control of production and service provision
+    scope: covered
+  - id: "8.5.4"
+    title: Preservation
+    scope: covered
+capabilities:
+  - sop-management
+  - evidence-collection
+  - approval-signing
+  - audit-packet
+  - release-control

@@ -1,0 +1,31 @@
+schemaVersion: v1
+id: WF-0001
+title: Temperature-sensitive shipment release
+subjectType: shipment
+policyRefs:
+  - SOP-0001
+steps:
+  - id: attach_temperature_log
+    title: Attach temperature log
+    action: evidence.add
+    schema: temperature-log
+    blocking: true
+  - id: validate_temperature
+    title: Validate temperature stays in range
+    action: policy.check
+    rule: shipment.temperature.in_range
+    blocking: true
+  - id: request_qa_approval
+    title: Request QA + Ops approvals
+    action: approval.request
+    roles:
+      - qa_manager
+      - ops_manager
+    blocking: true
+  - id: release
+    title: Release shipment
+    action: state.transition
+    to: released
+onFailure:
+  action: state.transition
+  to: blocked

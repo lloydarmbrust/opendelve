@@ -1,0 +1,43 @@
+schemaVersion: v1
+name: temperature-log
+title: Temperature Log
+description: |
+  Time-series temperature readings covering the storage-to-pack window of a
+  temperature-sensitive shipment. Used by SOP-0001.
+inputFormat: csv
+csv:
+  requiredColumns:
+    - timestamp
+    - temperature_celsius
+    - sensor_id
+  optionalColumns:
+    - location
+    - operator_initials
+  parsing:
+    timestampFormat: rfc3339
+    delimiter: ","
+    hasHeader: true
+validation:
+  minIntervalMinutes: 30
+  minReadings: 6
+  range:
+    minCelsius: 2.0
+    maxCelsius: 8.0
+    onOutOfRange: block
+metadata:
+  extract:
+    - field: minObservedCelsius
+      from: temperature_celsius
+      reduce: min
+    - field: maxObservedCelsius
+      from: temperature_celsius
+      reduce: max
+    - field: readingCount
+      from: temperature_celsius
+      reduce: count
+    - field: firstReadingAt
+      from: timestamp
+      reduce: min
+    - field: lastReadingAt
+      from: timestamp
+      reduce: max

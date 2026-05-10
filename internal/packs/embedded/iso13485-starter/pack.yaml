@@ -1,0 +1,20 @@
+schemaVersion: v1
+id: iso13485-starter
+version: 0.0.1
+framework:
+  name: ISO 13485
+  version: "2016"
+name: "ISO 13485:2016 starter (coming soon in v0.2)"
+description: |
+  Placeholder pack for ISO 13485 (Medical devices QMS). Full content
+  ships in v0.2 — see https://github.com/lloydarmbrust/opendelve for the
+  roadmap. Selecting this pack at v1 init time materializes a STUB.md
+  and reserves the directory layout; it does not yet provide working SOPs.
+depth: coming-soon
+dependencies:
+  - pack: iso9001
+    version: "^0.1.0"
+files:
+  - path: STUB.md
+    role: doc
+capabilities: []
