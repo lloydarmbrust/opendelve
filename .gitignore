@@ -1,0 +1,47 @@
+# Binaries
+opendelve
+opendelve-*
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Test artifacts
+*.test
+*.out
+coverage.txt
+coverage.html
+
+# Go build cache
+.go/
+vendor/
+
+# GoReleaser output
+dist/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Generated demo artifacts (CI regenerates)
+demo/*.gif
+demo/*.mp4
+demo/*.webm
+
+# Generated docs build
+docs/.vitepress/dist/
+docs/.vitepress/cache/
+node_modules/
+
+# Local credentials (never commit)
+.env
+.env.local
+*.pem
+*.key
+
+# Local test repos
+test-output/
+.scratch/
