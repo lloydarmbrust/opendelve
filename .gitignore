@@ -1,6 +1,6 @@
-# Binaries
-opendelve
-opendelve-*
+# Compiled binaries (root-level only; do NOT match cmd/opendelve/ directory)
+/opendelve
+/opendelve-*
 *.exe
 *.dll
 *.so

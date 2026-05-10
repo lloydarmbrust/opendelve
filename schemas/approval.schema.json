@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lloydarmbrust.github.io/opendelve/schemas/v1/approval.schema.json",
+  "title": "OpenDelve Approval Receipt",
+  "description": "JSON receipt produced by `opendelve approve sign`. Lives at approvals/<year>/APR-<year>-<counter>.json. Per eng review A5: this is an APPROVAL RECEIPT, not a cryptographically signed PDF. Cryptographic anchor is the git commit (sha) plus the Sigstore-signed binary that produced it.",
+  "type": "object",
+  "required": ["schemaVersion", "id", "subjectRef", "subjectVersion", "git", "signer", "meaning", "timestamp"],
+  "properties": {
+    "schemaVersion": { "type": "string", "const": "v1" },
+    "id": {
+      "type": "string",
+      "pattern": "^APR-\\d{4}-\\d{4}$",
+      "description": "Stable id. Format: APR-YYYY-NNNN. Counter resets each year per eng review A8."
+    },
+    "subjectRef": {
+      "type": "string",
+      "description": "Subject being approved (SOP-NNNN, WF-NNNN, shipment-NNN, etc.)."
+    },
+    "subjectVersion": {
+      "type": "string",
+      "description": "Version of the subject at sign time."
+    },
+    "subjectHash": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$",
+      "description": "sha256 of the subject's content at sign time. Binds approval to exact bytes."
+    },
+    "git": {
+      "type": "object",
+      "required": ["repository", "commit"],
+      "properties": {
+        "repository": { "type": "string", "description": "Repository slug (org/name)." },
+        "commit": { "type": "string", "description": "sha1 hex of HEAD at sign time." },
+        "branch": { "type": "string" },
+        "tag": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "signer": {
+      "type": "object",
+      "required": ["typedName", "email", "role"],
+      "description": "Identity of the person signing. v1 captures git config user identity opportunistically; OIDC actor is captured when run in a GitHub Actions runner.",
+      "properties": {
+        "typedName": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 200,
+          "description": "Full name typed at sign time (--name flag)."
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "From git config user.email at sign time."
+        },
+        "role": {
+          "type": "string",
+          "description": "Role being signed in (qa_manager, ops_manager, etc.). Comes from --role or matched against requiredApprovals on the subject."
+        },
+        "githubActor": {
+          "type": "string",
+          "description": "GITHUB_ACTOR env var if signing from a GitHub Actions runner. Absent on local terminal signs."
+        },
+        "oidcClaims": {
+          "type": "object",
+          "description": "OIDC token claims if available (GitHub Actions only). Opportunistic; never required.",
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "provider": {
+          "type": "string",
+          "enum": ["git-config", "github-oidc"],
+          "description": "How the signer was authenticated. v1 supports git-config (local terminal) and github-oidc (CI runner)."
+        },
+        "method": {
+          "type": "string",
+          "description": "Free-form auth method label."
+        }
+      },
+      "additionalProperties": false
+    },
+    "meaning": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000,
+      "description": "Explicit meaning of this signature. Required by Part-11-style controls."
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "UTC ISO 8601 of sign time."
+    },
+    "certificate": {
+      "type": "object",
+      "description": "Reference to the rendered approval certificate PDF.",
+      "properties": {
+        "path": { "type": "string", "description": "Relative path to the cert PDF in audit-packets/<year>/." },
+        "hash": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" }
+      },
+      "additionalProperties": false
+    },
+    "supersedes": {
+      "type": ["string", "null"],
+      "description": "Id of an earlier approval this one supersedes. Always null in v1 (supersession deferred to v0.2)."
+    },
+    "revokedBy": {
+      "type": ["string", "null"],
+      "description": "Id of a later approval that revokes this one. Always null in v1."
+    }
+  },
+  "additionalProperties": false
+}

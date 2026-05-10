@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lloydarmbrust.github.io/opendelve/schemas/v1/packet.schema.json",
+  "title": "OpenDelve Audit Packet Manifest",
+  "description": "Manifest for an audit packet bundle. Lives at audit-packets/<year>/<subject>/manifest.json. Lists every artifact in the packet plus their hashes for integrity. Per PHI policy, raw evidence is NEVER embedded in the packet PDF or zip unless --include-raw was explicitly passed at build time.",
+  "type": "object",
+  "required": ["schemaVersion", "id", "subject", "scope", "builtBy", "builtAt", "artifacts"],
+  "properties": {
+    "schemaVersion": { "type": "string", "const": "v1" },
+    "id": {
+      "type": "string",
+      "pattern": "^PKT-\\d{4}-\\d{4}$",
+      "description": "Stable id. Format: PKT-YYYY-NNNN."
+    },
+    "subject": {
+      "type": "string",
+      "description": "Subject id this packet covers."
+    },
+    "scope": {
+      "type": "object",
+      "required": ["include"],
+      "properties": {
+        "include": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["approvals", "evidence", "controls", "trace", "sops", "workflows"]
+          },
+          "uniqueItems": true,
+          "description": "Artifact categories included in this packet."
+        },
+        "rawEvidenceEmbedded": {
+          "type": "boolean",
+          "default": false,
+          "description": "True only if --include-raw was passed at build time. PHI risk: never default true."
+        }
+      },
+      "additionalProperties": false
+    },
+    "format": {
+      "type": "string",
+      "enum": ["zip-only", "pdf-only", "zip-plus-pdf"],
+      "default": "zip-plus-pdf"
+    },
+    "builtBy": {
+      "type": "object",
+      "required": ["email"],
+      "properties": {
+        "name": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "actor": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "builtAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "git": {
+      "type": "object",
+      "properties": {
+        "repository": { "type": "string" },
+        "commit": { "type": "string" },
+        "branch": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "artifacts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["path", "kind", "hash", "size"],
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "Path inside the packet zip, or relative to the packet directory if zip-less."
+          },
+          "kind": {
+            "type": "string",
+            "enum": ["sop", "workflow", "evidence-manifest", "approval-receipt", "approval-cert-pdf", "trace-json", "summary-pdf", "control-map", "checksums"]
+          },
+          "hash": {
+            "type": "string",
+            "pattern": "^sha256:[a-f0-9]{64}$"
+          },
+          "size": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "summary": {
+      "type": "object",
+      "properties": {
+        "approvalCount": { "type": "integer", "minimum": 0 },
+        "evidenceCount": { "type": "integer", "minimum": 0 },
+        "controlsCovered": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

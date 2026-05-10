@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lloydarmbrust.github.io/opendelve/schemas/v1/evidence.schema.json",
+  "title": "OpenDelve Evidence Manifest",
+  "description": "Manifest for an attached evidence file. Lives at evidence/manifests/<subject>-<schema>-<id>.json. Raw evidence stays at the user-provided path; only the manifest goes in git by default. PHI policy: raw is NEVER embedded in the manifest unless --include-raw is explicitly passed at audit packet build time.",
+  "type": "object",
+  "required": ["schemaVersion", "id", "subject", "schema", "rawPath", "rawHash", "addedBy", "addedAt"],
+  "properties": {
+    "schemaVersion": { "type": "string", "const": "v1" },
+    "id": {
+      "type": "string",
+      "pattern": "^EV-\\d{4}-\\d{4}$",
+      "description": "Stable id. Format: EV-YYYY-NNNN."
+    },
+    "subject": {
+      "type": "string",
+      "description": "Subject id this evidence is attached to (SOP-NNNN, shipment-NNN, etc.)."
+    },
+    "schema": {
+      "type": "string",
+      "description": "Evidence schema name. Must match a schema declared in an installed pack's evidence-schemas/ directory."
+    },
+    "rawPath": {
+      "type": "string",
+      "description": "Path to the raw evidence file at the time of attachment. Relative to repo root if inside the repo, or absolute if outside (PHI-safe path)."
+    },
+    "rawHash": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$",
+      "description": "sha256 of the raw evidence file content at the time of attachment. Hex lowercase."
+    },
+    "rawSize": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Bytes."
+    },
+    "rawMimeType": {
+      "type": "string",
+      "description": "Detected MIME type of the raw file."
+    },
+    "schemaValidated": {
+      "type": "boolean",
+      "description": "Did the raw file pass schema validation at add time?"
+    },
+    "schemaValidationErrors": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "If schemaValidated is false, the validation failures."
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Schema-specific metadata extracted from the evidence at add time. Shape varies by schema.",
+      "additionalProperties": true
+    },
+    "addedBy": {
+      "type": "object",
+      "required": ["email"],
+      "properties": {
+        "name": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "actor": {
+          "type": "string",
+          "description": "Optional GitHub actor when run inside Actions."
+        }
+      },
+      "additionalProperties": false
+    },
+    "addedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "UTC ISO 8601."
+    },
+    "git": {
+      "type": "object",
+      "properties": {
+        "commit": { "type": "string" },
+        "branch": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

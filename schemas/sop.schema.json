@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lloydarmbrust.github.io/opendelve/schemas/v1/sop.schema.json",
+  "title": "OpenDelve SOP Frontmatter",
+  "description": "YAML frontmatter for an SOP markdown file. The body of the markdown file holds Purpose, Scope, Responsibilities, Procedure, References sections.",
+  "type": "object",
+  "required": ["schemaVersion", "id", "title", "version", "status", "owners"],
+  "properties": {
+    "schemaVersion": { "type": "string", "const": "v1" },
+    "id": {
+      "type": "string",
+      "pattern": "^SOP-\\d{4}$",
+      "description": "Stable id. Format: SOP-NNNN."
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["draft", "proposed", "effective", "superseded", "retired"]
+    },
+    "owners": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "description": "Role identifiers (e.g., 'qa_manager', 'ops_manager')."
+      }
+    },
+    "effectiveDate": {
+      "type": ["string", "null"],
+      "format": "date"
+    },
+    "reviewCycleDays": {
+      "type": "integer",
+      "minimum": 30,
+      "maximum": 1825,
+      "default": 365
+    },
+    "requiredApprovals": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["role", "signaturesRequired"],
+        "properties": {
+          "role": { "type": "string" },
+          "signaturesRequired": { "type": "integer", "minimum": 1, "default": 1 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "evidenceRequirements": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["schema"],
+        "properties": {
+          "schema": { "type": "string", "description": "Evidence schema name from packs." },
+          "required": { "type": "boolean", "default": true }
+        },
+        "additionalProperties": false
+      }
+    },
+    "blockingConditions": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Conditions that block the workflow. Examples: missing_required_evidence, failed_temperature_range."
+    },
+    "workflowBindings": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^WF-\\d{4}$" }
+    },
+    "controlMappings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["framework", "control"],
+        "properties": {
+          "framework": { "type": "string" },
+          "control": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "trainingRequirements": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^TR-\\d{4}" }
+    },
+    "signatureRequirements": {
+      "type": "object",
+      "properties": {
+        "meaning": {
+          "type": "string",
+          "description": "Default meaning text presented at sign-time."
+        },
+        "reauthRequired": {
+          "type": "boolean",
+          "default": false,
+          "description": "v1: always false (deferred to v0.2). Documented for forward-compat."
+        }
+      },
+      "additionalProperties": false
+    },
+    "auditPacketOutputs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["approval_certificate_pdf", "evidence_manifest_json", "packet_pdf", "packet_zip", "trace_json"]
+      },
+      "uniqueItems": true
+    }
+  },
+  "additionalProperties": false
+}

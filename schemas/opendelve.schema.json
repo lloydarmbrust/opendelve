@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lloydarmbrust.github.io/opendelve/schemas/v1/opendelve.schema.json",
+  "title": "OpenDelve Repo Config",
+  "description": "Root configuration for an OpenDelve-managed repo. Lives at <repo>/opendelve.yaml.",
+  "type": "object",
+  "required": ["schemaVersion", "name", "packs"],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "v1",
+      "description": "Schema version. Bump triggers a v0.2 migration command."
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "pattern": "^[a-z0-9][a-z0-9-]*[a-z0-9]$",
+      "description": "Project slug. Lowercase, hyphens only. Used in artifact filenames."
+    },
+    "defaultBranch": {
+      "type": "string",
+      "default": "main",
+      "description": "Git branch where signed approvals are committed."
+    },
+    "packs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["name", "version"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "enum": ["iso9001", "soc2-starter", "iso13485-starter", "pci-dss-starter"],
+            "description": "Pack identifier. Must match a pack bundled in the binary or installed via pack add."
+          },
+          "version": {
+            "type": "string",
+            "pattern": "^\\d+\\.\\d+\\.\\d+$",
+            "description": "Semantic version of the pack at install time."
+          }
+        }
+      }
+    },
+    "runtime": {
+      "type": "object",
+      "properties": {
+        "evidenceMode": {
+          "type": "string",
+          "enum": ["local", "encrypted-backend"],
+          "default": "local",
+          "description": "Where raw evidence files live. v1 supports 'local' only; encrypted-backend is v0.2."
+        },
+        "packetMode": {
+          "type": "string",
+          "enum": ["zip-only", "pdf-only", "zip-plus-pdf"],
+          "default": "zip-plus-pdf",
+          "description": "Audit packet output format."
+        },
+        "approvalMode": {
+          "type": "string",
+          "enum": ["git-bound", "external-oidc"],
+          "default": "git-bound",
+          "description": "How approvals are anchored. v1 supports 'git-bound' only; external-oidc is v0.2."
+        },
+        "rawEvidenceInPacket": {
+          "type": "boolean",
+          "default": false,
+          "description": "If true, raw evidence files embed in packet PDFs/zips. NEVER true by default — see PHI policy."
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
