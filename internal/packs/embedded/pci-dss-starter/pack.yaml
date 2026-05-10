@@ -1,0 +1,16 @@
+schemaVersion: v1
+id: pci-dss-starter
+version: 0.0.1
+framework:
+  name: PCI DSS
+  version: "v4.0.1"
+name: "PCI DSS v4.0.1 starter (coming soon in v0.2)"
+description: |
+  Placeholder pack for PCI DSS v4.0.1. Full content ships in v0.2.
+  Selecting this pack at v1 init time materializes a STUB.md and reserves
+  the directory layout; it does not yet provide working SOPs.
+depth: coming-soon
+files:
+  - path: STUB.md
+    role: doc
+capabilities: []

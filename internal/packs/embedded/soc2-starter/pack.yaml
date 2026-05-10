@@ -1,0 +1,17 @@
+schemaVersion: v1
+id: soc2-starter
+version: 0.0.1
+framework:
+  name: SOC 2 Type 2
+  version: "2017-TSC"
+name: "SOC 2 Type 2 starter (coming soon in v0.2)"
+description: |
+  Placeholder pack for SOC 2 Type 2. Full content ships in v0.2 — track
+  https://github.com/lloydarmbrust/opendelve/issues for the v0.2 roadmap.
+  Selecting this pack at v1 init time materializes a STUB.md and reserves
+  the directory layout; it does not yet provide working SOPs.
+depth: coming-soon
+files:
+  - path: STUB.md
+    role: doc
+capabilities: []

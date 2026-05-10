@@ -1,0 +1,26 @@
+schemaVersion: v1
+framework: iso9001
+frameworkVersion: "2015"
+controls:
+  - id: "7.5"
+    title: Documented information
+    coverage: partial
+    files: []
+    notes: |
+      v0.1 covers only document IDs and version frontmatter. v0.2 will add
+      explicit control of changes (7.5.3.1) and document review records.
+  - id: "8.5.1"
+    title: Control of production and service provision
+    coverage: covered
+    files:
+      - sops/SOP-0001-temperature-sensitive-shipment-release.md
+      - workflows/WF-0001-shipment-release.yml
+      - evidence-schemas/temperature-log.yaml
+  - id: "8.5.4"
+    title: Preservation
+    coverage: covered
+    files:
+      - sops/SOP-0001-temperature-sensitive-shipment-release.md
+    notes: |
+      Cold-chain preservation handled via the temperature-log evidence
+      schema's range validation in SOP-0001.
